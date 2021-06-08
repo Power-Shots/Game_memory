@@ -11,7 +11,7 @@
             time: 1000,
             margin: 2,
             delay: 500,
-            img: 'blank.png'
+            img: '',
         }, options);
 
         if(options.quantity<0 || options.quantity> 5){
@@ -29,10 +29,10 @@
                 let arr = Array.from( Array(options.quantity), (_,x)=> x+1);
                 arr = [...arr, ...arr];
                 this.arr = arr.sort(() => Math.random() - .5)
-                console.log(arr)
             }
 
             generateHTML(){
+                let backgroundImg = 
                 this.memorySection
                     .css({
                         'display': 'grid',
@@ -42,7 +42,7 @@
                     .html(this.arr.map(item => `
                         <div class="item">
                             <img src="images/${item}.jpg">
-                            <div class="cover" data-id="${item}"></div>
+                            <div class="cover" data-id="${item}" style="background-image: url(${options.img}); background-size: cover;"></div>
                         </div>
                     `));
             }
@@ -53,24 +53,34 @@
                     .hide(0)
                     .delay(options.time)
                     .show(0)
-                    .on('click', function(){
-                        $(this).hide(0);
+                    .on('click', function(e){
+                        $(e.target).hide(0);
                         if(!id){
-                            console.log('1');
-                            id = $(this).data('id');
-                            console.log(id)
+                            id = $(e.target);
                         }
                         else{
-                            console.log('2');
-                            if(id === $(this).data('id')){
+                            if(id.data('id') === $(e.target).data('id')){
                                 console.log('Одинаковые')
+                                $(id).addClass('disable');
+                                $(e.target).addClass('disable');
                             }
                             else{
+                                $(id).delay(options.time).show(0);
+                                $(e.target).delay(options.time).show(0)
                                 console.log('разные')
                             }
                             id = '';
                         }
-                    })
+
+                        if($('.disable').length === options.quantity*2){
+                            setTimeout(function(){
+                               let result = confirm('Вы выиграли, хотите продолжить играть?');
+                                if(result === true){
+                                    this.init();
+                                }
+                            }.bind(this), 1000);
+                        }
+                    }.bind(this));
             }
 
             init(){
