@@ -39,6 +39,7 @@
 или перенесите этот код в ваши стили:
 
 ...css
+
         .memory img{
             display: block;
             width: 100%;
