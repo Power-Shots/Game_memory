@@ -14,7 +14,7 @@
             img: '',
         }, options);
 
-        if(options.quantity<0 || options.quantity> 5){
+        if(options.quantity<1 || options.quantity> 5){
             options.quantity = 5;
         }
 
